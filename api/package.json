@@ -1,0 +1,39 @@
+{
+  "name": "upcoming-movies-arctouch",
+  "version": "1.0.0",
+  "description": "A Project to show upcoming movies for cinephiles. This MVP is part of the recruitment process for ArcTouch.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/manfioLP/supero-recruitment-challenge.git"
+  },
+  "author": "manfioLP",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/manfioLP/upcoming-movies-arctouch/issues"
+  },
+  "homepage": "https://github.com/manfioLP/upcoming-movies-arctouch#readme",
+  "dependencies": {
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.11.1",
+    "bluebird": "^3.7.1",
+    "chai": "^4.2.0",
+    "cors": "^2.8.5",
+    "eventemitter2": "^0.4.14",
+    "express": "^4.17.1",
+    "http": "0.0.0",
+    "http-status-code": "^2.1.0",
+    "http-status-codes": "^1.3.2",
+    "mongoose": "^5.7.5",
+    "node-mongo-seeds": "^3.1.0",
+    "node-uuid": "^1.4.8",
+    "path": "^0.12.7",
+    "require": "^2.4.20"
+  }
+}

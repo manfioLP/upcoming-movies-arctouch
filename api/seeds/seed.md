@@ -1,0 +1,1 @@
+Here you create your mongo seeds that will be used to create fake data to use for testing the application.

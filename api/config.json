@@ -1,0 +1,14 @@
+{
+    "db": {
+        "mongodb": {
+            "host": "localhost",
+            "name": "upcoming-movies-arctouch",
+            "erase_db": true,
+            "fixtures": "tests/fixtures"
+        }
+    },
+    "server": {
+        "domain": "localhost",
+        "port": 1968
+    }
+}

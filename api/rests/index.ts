@@ -1,4 +1,5 @@
 import {Source} from '../events/Source';
+import {MovieRest} from '../rests/Movie'
 
 export class InitRest extends Source {
     private _restfulSet: object;
@@ -6,6 +7,7 @@ export class InitRest extends Source {
     constructor(router) {
         super();
         this.restfulSet = {
+            MovieRest,
         };
         for (let restful in this.restfulSet) {
             if (this.restfulSet.hasOwnProperty(restful)) {

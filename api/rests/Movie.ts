@@ -4,12 +4,13 @@ import * as HTTPStatus from 'http-status-codes';
 
 export class MovieRest extends BasicRest {
 
+    protected _handler: MovieHandler
     get handler() {
-        return this.handler
+        return this._handler
     }
 
     set handler(handler: MovieHandler) {
-        this.handler = handler
+        this._handler = handler
     }
 
     constructor(router) {
@@ -32,11 +33,11 @@ export class MovieRest extends BasicRest {
     async getUpcoming(req, res) {
         const page = req.query.hasOwnProperty('page') ? req.query.page : 1;
 
-        const response = await this.handler.getUpcomingMovies(page)
+        const response = await this.handler.getUpcomingMovies(Number(page))
 
         res
             .status(response.status)
-            .send(response.data)
+            .send(response)
     }
 
     async getDetails(req, res) {

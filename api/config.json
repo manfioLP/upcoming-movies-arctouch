@@ -12,7 +12,7 @@
         "port": 1968
     },
     "tmdb": {
-        "base_url": "https://api.themoviedb.org/3/movie/upcoming",
+        "base_url": "https://api.themoviedb.org/3",
         "api_key": "1f54bd990f1cdfb230adb312546d765d",
         "language": "en-US"
     }

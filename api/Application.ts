@@ -1,29 +1,29 @@
 import * as Express from "express";
-import * as Path from "path";
 import * as HTTP from "http";
 import * as CORS from "cors";
 import * as BodyParser from "body-parser";
-import {InitRest} from "./rests";
-import {Source} from "./events/Source";
-import {Database} from "./db/Database";
 import {Router} from "express";
+import {MovieRest} from "./rests/Movie"
 
-export class Application extends Source {
+export class Application {
   private _mainPort: any;
-  private _dataBase: any;
   private _server: any;
   private _router: any;
   private static _config: any;
   private _app: any;
 
+  private restfulSet = {
+    MovieRest,
+  }
+
   constructor(pathConfig) {
-    super();
     Application.config = pathConfig;
     this.app = Express;
     this.server = this.initServer();
     this.serverConfiguration();
     this.router = Router;
-    this.server.listen(this.mainPort, this.initDataBase.bind(this));
+    this.serverOk()
+    this.initRest()
   }
 
   private set mainPort(port) {
@@ -32,14 +32,6 @@ export class Application extends Source {
 
   private get mainPort() {
     return this._mainPort;
-  }
-
-  private set dataBase(dataBase) {
-    this._dataBase = new dataBase(Application.config.db);
-  }
-
-  private get dataBase() {
-    return this._dataBase;
   }
 
   private set server(server) {
@@ -75,46 +67,42 @@ export class Application extends Source {
   }
 
 
-  private wiring() {
-    this.hub.on('error.**', this.initError.bind(this));
-    this.hub.on('database.ready', this.dataBaseReady.bind(this));
-    this.hub.on('restful.ready', this.serverOk.bind(this));
-  }
-
-  private initError(error) {
-    return console.error(`Something is wrong ${error}`);
-  }
-
+  /**
+   * É executada assim que o server fica pronto para atender.
+   */
   private serverOk() {
     this.app.use('/api', this.router);
-    this.hub.send(this, 'app.ready', {success: null, error: null});
     console.log(`APP READY. LISTENING ON PORT::${Application.config.server.port}`);
   }
 
-  private initDataBase() {
-    this.wiring();
-    this.dataBase = Database;
-  }
-
-  private dataBaseReady() {
-    new InitRest(this.router);
-  }
-
+  /**
+   * Inicia as configurações do server.
+   */
   private serverConfiguration() {
     this.app.set('view engine', 'ejs');
-    this.app.set('views', Path.resolve(__dirname + '/views'));
     this.app.use(CORS());
     this.app.use(BodyParser.urlencoded({extended: true}));
     this.app.use(BodyParser.json());
   }
 
+  /**
+   *
+   * @returns {any}
+   *
+   * Inicia o server, se no config estiver que é um https, ele inicia com chave.
+   * Caso contrario, ele inicia apenas em http.
+   */
   private initServer() {
       this.mainPort = Application.config.server.port;
-      return HTTP.createServer(this.app);
+      return HTTP.createServer(this.app).listen(this.mainPort);
   }
 
-  public async destroy() {
-    return await this.dataBase.destroy();
+  private initRest() {
+    for (let rest in this.restfulSet) {
+      if (this.restfulSet.hasOwnProperty(rest)) {
+        new this.restfulSet[rest](this.router);
+      }
+    }
   }
 
 }

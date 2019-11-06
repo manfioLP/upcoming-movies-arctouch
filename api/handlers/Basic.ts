@@ -27,7 +27,6 @@ export class BasicHandler extends Source {
     }
 
     async getError(error) {
-        // TODO: handle error
         if (error.status_code) {
             return BasicHandler.getExternalError(error)
         }
@@ -41,6 +40,8 @@ export class BasicHandler extends Source {
         switch (error.status_code) {
             case 7:
                 return {error: 'external api problem - invalid tmdb key', status: HTTPStatus.UNAUTHORIZED}
+            case 34:
+                return {error: 'external api problem - the requested id was not found on tmdb', status: HTTPStatus.NOT_FOUND}
             default:
                 return {error: `external api problem - error code#${error.status_code} not tracked yet`, status: HTTPStatus.BAD_REQUEST}
         }

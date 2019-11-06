@@ -1,0 +1,46 @@
+<div>
+    <div>
+        <h2> Welcome to ArcTouch's Upcoming Movies</h2>
+        <div>
+            <div>
+                <mat-form-field>
+                    <input>
+                </mat-form-field>
+            </div>
+    
+            <table mat-table [dataSource]="moviesTable">
+                
+                <ng-container matColumnDef="name">
+                    <th math-header-cell> Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.name}}</td>
+                </ng-container>
+                
+                <ng-container matColumnDef="poster">
+                    <th math-header-cell *matHeaderCellDef> Poster</th>
+                    <td mat-cell *matCellDef="let element"> {{element.poster}}</td>
+                </ng-container>
+                
+                <ng-container matColumnDef="genre">
+                    <th math-header-cell *matHeaderCellDef> Genre</th>
+                    <td mat-cell *matCellDef="let element"> {{element.genre}}</td>
+                </ng-container>
+                
+                <ng-container matColumnDef="release_date">
+                    <th math-header-cell *matHeaderCellDef> Release Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.release_date}}</td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="rowClick(myRowData)"></tr>
+            </table>
+        </div>
+        <div>
+            <button class="show more" mat-raised-button (click)="requestNextPage()">Show More...</button>
+        </div>
+    </div>
+    
+    <app-movie-details 
+        *ngIf="selectedMovie"
+        [movie]="selectedMovie">
+    </app-movie-details>
+    </div>

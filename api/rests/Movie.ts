@@ -31,13 +31,13 @@ export class MovieRest extends BasicRest {
     }
 
     async getUpcoming(req, res) {
-        const page = req.query.hasOwnProperty('page') ? req.query.page : 1;
+        const page = req.query.hasOwnProperty('page') ? Number(req.query.page) : 1;
 
-        if (page < 1 || typeof page != 'number') {
+        if (page < 1 || isNaN(page)) {
             return res.status(HTTPStatus.BAD_REQUEST).send({success: false, error: 'invalid page query value - it must be a number greater than zero!'})
         }
 
-        const response = await this.handler.getUpcomingMovies(Number(page))
+        const response = await this.handler.getUpcomingMovies(page)
 
         res
             .status(response.status)

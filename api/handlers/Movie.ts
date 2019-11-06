@@ -2,33 +2,50 @@ import {BasicHandler} from "./Basic";
 import * as path from 'path';
 import * as HTTPStatus from 'http-status-codes';
 import {MessageData} from "../interfaces/MessageData";
+
 const request = require('request-promise')
 
 export class MovieHandler extends BasicHandler {
 
-    async getUpcomingMovies(page: number): Promise<MessageData> {
+    private tmdb
+    private readonly globalOptions
+    private static _instance: MovieHandler;
 
-        if (page < 1 || typeof page != 'number') {
-            return this.handleReturn(false, 'invalid page query value - it must be a number greater than zero!', HTTPStatus.BAD_REQUEST)
-        }
-        const tmdb = require(path.resolve('config.json')).tmdb
-        const options = {
+    private constructor() {
+        super()
+        this.tmdb = require(path.resolve('config.json')).tmdb
+        this.globalOptions = {
             method: 'GET',
-            url: tmdb.base_url,
-            qs: {page, language: tmdb.language, api_key: tmdb.api_key},
+            url: this.tmdb.base_url,
+            qs: {language: this.tmdb.language, api_key: this.tmdb.api_key},
             body: '{}'
         }
+    }
 
-        function callback(err, res, body) {
-            if (err)
-                throw new Error(err)
-            if (!body.success)
-                return {success: body.success, err: body.status_message}
-            return {success: true, data: res, body}
+    static getInstace() {
+        if (this._instance)
+            return this._instance
+        else
+            return new MovieHandler()
+    }
+
+    private callback(err, res, body) {
+        if (err)
+            throw new Error(err)
+        if (!body.success)
+            return {success: body.success, err: body.status_message}
+        return {success: true, data: res, body}
+    }
+
+    async getUpcomingMovies(page: number): Promise<MessageData> {
+        const options = {
+            ...this.globalOptions
         }
+        options.qs['page'] = page
+        options.url += '/movie/upcoming'
 
         try {
-            const requestResponse = await request(options, callback)
+            const requestResponse = await request(options, this.callback)
             return this.handleReturn(true, JSON.parse(requestResponse), HTTPStatus.OK)
         } catch (requestError) {
             const error = JSON.parse(requestError.error)
@@ -36,7 +53,17 @@ export class MovieHandler extends BasicHandler {
         }
     }
 
-    async getMovieDetails(movieId: string) {
-        return {status: 501, data: 'not implemented'}
+    async getMovieDetails(movieId: string): Promise<MessageData> {
+        const options = {
+            ...this.globalOptions
+        }
+        options.url += `/movie/${movieId}`
+        try {
+            const requestResponse = await request(options, this.callback)
+            return this.handleReturn(true, JSON.parse(requestResponse), HTTPStatus.OK)
+        } catch (requestError) {
+            const error = JSON.parse(requestError.error)
+            return this.handleReturn(false, error)
+        }
     }
 }

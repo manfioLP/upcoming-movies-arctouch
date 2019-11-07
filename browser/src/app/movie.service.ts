@@ -11,7 +11,7 @@ import { Movie } from '../model/Movie';
 })
 export class MovieService {
 
-  private api_url = 'localhost:1968/api';  // URL to web api
+  private api_url = 'http://localhost:1968/api';  // URL to web api
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })

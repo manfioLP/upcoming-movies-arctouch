@@ -12,18 +12,28 @@ import { MovieService } from '../movie.service';
 export class MovieListComponent implements OnInit {
 
   private moviesTable: MatTableDataSource<MovieList[]>
-  private columnsToDisplay: string[] = ['original_title', 'poster_path', 'genre_id', 'release_date']
+  // private columnsToDisplay: string[] = ['original_title', 'poster_path', 'genre_id', 'release_date']
+  private columnsToDisplay: string[] = ['release_date']
   selectedMovie: MovieList
   movies: MovieList[]
+  currentPage: number
 
   @Input() public displayMovieForm: boolean
   constructor(
     private movieService: MovieService
   ) {
+    this.currentPage = 1
   }
 
-  getMovies() {
+  getUpcomingMovies() {
+    // TODO: Implement getUpcomingMovie
+    this.movieService.getUpcomingMovies(this.currentPage++).subscribe(res => {
+      const movies = res.data.results
+      this.moviesTable = new MatTableDataSource(movies)
+    })
 
+    // TODO: set list of movies requested from api
+    // this.moviesTable = new MatTableDataSource()
   }
 
   rowClick(movie: MovieList) {
@@ -40,7 +50,7 @@ export class MovieListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getMovies()
+    this.getUpcomingMovies()
   }
 
 }

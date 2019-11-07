@@ -5,7 +5,14 @@ import { AppComponent } from './app.component';
 import { MovieListComponent } from './movie-list/movie-list.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MovieDetailComponent } from './movie-detail/movie-detail.component';
+ 
+import { HttpClientModule } from '@angular/common/http';
+
 import { MatTableDataSource } from '@angular/material/table';
+import { MatTableModule } from '@angular/material'
+import { MatCardModule } from '@angular/material/card';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -16,7 +23,10 @@ import { MatTableDataSource } from '@angular/material/table';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    MatTableDataSource
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

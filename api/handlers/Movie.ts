@@ -2,6 +2,7 @@ import {BasicHandler} from "./Basic";
 import * as path from 'path';
 import * as HTTPStatus from 'http-status-codes';
 import {MessageData} from "../interfaces/MessageData";
+import {Genre} from "../interfaces/Genre"
 
 const request = require('request-promise')
 
@@ -10,6 +11,7 @@ export class MovieHandler extends BasicHandler {
     private tmdb
     private readonly globalOptions
     private static _instance: MovieHandler;
+    private currentGenres: Genre[]
 
     private constructor() {
         super()
@@ -20,6 +22,7 @@ export class MovieHandler extends BasicHandler {
             qs: {language: this.tmdb.language, api_key: this.tmdb.api_key},
             body: '{}'
         }
+        this.getMovieGenres()
     }
 
     static getInstace() {
@@ -46,12 +49,37 @@ export class MovieHandler extends BasicHandler {
 
         try {
             const requestResponse = await request(options, this.callback)
-            return this.handleReturn(true, JSON.parse(requestResponse), HTTPStatus.OK)
+            const movies = JSON.parse(requestResponse).results
+            return this.handleReturn(true, this.populateGenres(movies), HTTPStatus.OK)
         } catch (requestError) {
-            const error = JSON.parse(requestError.error)
+            console.error(requestError)
+            const error = JSON.parse(requestError.error ? requestError.error : requestError)
             return this.handleReturn(false, error)
         }
     }
+
+    populateGenres(movies) {
+        const populated_array = []
+        movies.forEach(element => {
+            populated_array.push({
+                ...element,
+                genres: this.setGenres(element)
+                })
+            });
+        return populated_array
+    }
+
+    setGenres(element) {
+        const arr = []
+        this.currentGenres.forEach(el => {
+            for (let genreId of element.genre_ids) {
+                if (genreId == el.id)
+                    arr.push(el.name)
+            }
+        })
+        return arr
+    }
+
 
     async getMovieDetails(movieId: string): Promise<MessageData> {
         const options = {
@@ -60,6 +88,22 @@ export class MovieHandler extends BasicHandler {
         options.url += `/movie/${movieId}`
         try {
             const requestResponse = await request(options, this.callback)
+            return this.handleReturn(true, JSON.parse(requestResponse), HTTPStatus.OK)
+        } catch (requestError) {
+            const error = JSON.parse(requestError.error)
+            return this.handleReturn(false, error)
+        }
+    }
+    
+    async getMovieGenres(): Promise<MessageData> {
+        const options = {
+            ...this.globalOptions
+        }
+        options.url += `/genre/movie/list`
+        try {
+            const requestResponse = await request(options, this.callback)
+            this.currentGenres = JSON.parse(requestResponse).genres
+            console.log(JSON.parse(requestResponse));
             return this.handleReturn(true, JSON.parse(requestResponse), HTTPStatus.OK)
         } catch (requestError) {
             const error = JSON.parse(requestError.error)

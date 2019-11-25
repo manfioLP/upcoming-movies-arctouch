@@ -13,7 +13,8 @@ export class MovieListComponent implements OnInit {
 
   private moviesTable: MatTableDataSource<MovieList[]>
   // private columnsToDisplay: string[] = ['original_title', 'poster_path', 'genre_id', 'release_date']
-  private columnsToDisplay: string[] = ['release_date']
+  private columnsToDisplay: string[] = ['genres', 'original_title']
+  genresMap: GenreMap = {}
   selectedMovie: MovieList
   movies: MovieList[]
   currentPage: number
@@ -28,7 +29,7 @@ export class MovieListComponent implements OnInit {
   getUpcomingMovies() {
     // TODO: Implement getUpcomingMovie
     this.movieService.getUpcomingMovies(this.currentPage++).subscribe(res => {
-      const movies = res.data.results
+      const movies = res.data
       this.moviesTable = new MatTableDataSource(movies)
     })
 
@@ -49,9 +50,31 @@ export class MovieListComponent implements OnInit {
     this.moviesTable.filter = filter.trim()
   }
 
+  getGenresMap() {
+    let genres = []
+    this.movieService.getGenres().subscribe(res => {
+      genres = res.data.genres
+      genres.map(el => {
+        this.genresMap[`${el.id}`] = el.name
+      })
+    })
+  }
+
   ngOnInit() {
+    // this.getGenresMap()
     this.getUpcomingMovies()
   }
 
+  getMovieGenres(genre_ids: [number]) {
+    let genres: string = ''
+    for (let genreId of genre_ids)
+      genres+= this.genresMap[`${genreId}`]
+    return genres
+  }
+
+}
+
+interface GenreMap {
+  [key: number]: string
 }
 

@@ -12,25 +12,25 @@
     
             <table mat-table [dataSource]="moviesTable" class="mat-elevation-z6">
                 
-                <!-- <ng-container matColumnDef="original_title">
+                <ng-container matColumnDef="original_title">
                     <th math-header-cell> Name</th>
                     <td mat-cell *matCellDef="let element"> {{element.original_title}}</td>
-                </ng-container> -->
+                </ng-container>
                 
                 <!-- <ng-container matColumnDef="poster_path">
                     <th math-header-cell *matHeaderCellDef> Poster</th>
                     <td mat-cell *matCellDef="let element"> {{element.poster}}</td>
                 </ng-container> -->
                 
-                <!-- <ng-container matColumnDef="genre">
+                <ng-container matColumnDef="genres">
                     <th math-header-cell *matHeaderCellDef> Genre</th>
-                    <td mat-cell *matCellDef="let element"> {{element.genre}}</td>
-                </ng-container> -->
+                    <td mat-cell *matCellDef="let element"> {{element.genres}}</td>
+                </ng-container>
                 
-                <ng-container matColumnDef="release_date">
+                <!-- <ng-container matColumnDef="release_date">
                     <th math-header-cell *matHeaderCellDef> Release Date</th>
                     <td mat-cell *matCellDef="let element"> {{element.release_date}}</td>
-                </ng-container>
+                </ng-container> -->
     
                 <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
                 <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="rowClick(myRowData)"></tr>

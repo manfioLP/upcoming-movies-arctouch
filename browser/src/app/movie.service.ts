@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { Movie } from '../model/Movie';
+import { Movie, Genre } from '../model/Movie';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +31,13 @@ export class MovieService {
 
   getMovie(id: number): Observable<any> {    
     return this.http.get<Movie[]>(`${this.api_url}/details/${id}`)
+      .pipe(
+        tap(res => {})
+      )
+  }
+
+  getGenres(): Observable<any> {    
+    return this.http.get<Genre[]>(`${this.api_url}/genres`)
       .pipe(
         tap(res => {})
       )

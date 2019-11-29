@@ -12,10 +12,8 @@ import { MatTable } from '@angular/material';
 
 export class MovieListComponent implements OnInit {
 
-  // @ViewChild(MatTable) private moviesTable: MatTableDataSource<MovieList>
   @ViewChild(MatTable, {static: false}) moviesTable: MatTable<MovieList>;
-  // private columnsToDisplay: string[] = ['original_title', 'poster_path', 'genre_id', 'release_date']
-  private columnsToDisplay: string[] = ['genres', 'original_title', 'release_date', 'poster_path'];
+  columnsToDisplay: string[] = ['genres', 'original_title', 'release_date', 'poster_path'];
   genresMap: GenreMap = {}
   selectedMovie: MovieList
   movieTableSource: MatTableDataSource<MovieList>;

@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table'
 import { Movie, MovieList } from '../../model/Movie';
 import { MovieService } from '../movie.service';
+import { MatTable } from '@angular/material';
 
 @Component({
   selector: 'app-movie-list',
@@ -11,13 +12,16 @@ import { MovieService } from '../movie.service';
 
 export class MovieListComponent implements OnInit {
 
-  private moviesTable: MatTableDataSource<MovieList[]>
+  // @ViewChild(MatTable) private moviesTable: MatTableDataSource<MovieList>
+  @ViewChild(MatTable) moviesTable: MatTable<MovieList>;
   // private columnsToDisplay: string[] = ['original_title', 'poster_path', 'genre_id', 'release_date']
-  private columnsToDisplay: string[] = ['genres', 'original_title']
+  private columnsToDisplay: string[] = ['genres', 'original_title', 'release_date', 'poster_path'];
   genresMap: GenreMap = {}
   selectedMovie: MovieList
+  movieTableSource: MatTableDataSource<MovieList>;
   movies: MovieList[]
   currentPage: number
+  private movieApiBaseURL = 'http://image.tmdb.org/t/p/w92';
 
   @Input() public displayMovieForm: boolean
   constructor(
@@ -29,12 +33,12 @@ export class MovieListComponent implements OnInit {
   getUpcomingMovies() {
     // TODO: Implement getUpcomingMovie
     this.movieService.getUpcomingMovies(this.currentPage++).subscribe(res => {
-      const movies = res.data
-      this.moviesTable = new MatTableDataSource(movies)
+      res.data.forEach(el => el.poster_path = `${this.movieApiBaseURL}${el.poster_path}`);
+      this.movies = res.data;
+      this.movieTableSource = new MatTableDataSource(this.movies);
+      // this.moviesTable = new MatTableDataSource(this.movies)
+      this.moviesTable.renderRows();
     })
-
-    // TODO: set list of movies requested from api
-    // this.moviesTable = new MatTableDataSource()
   }
 
   rowClick(movie: MovieList) {
@@ -46,30 +50,22 @@ export class MovieListComponent implements OnInit {
     this.displayMovieForm = false
   }
 
-  filterMovie(filter: string) {
-    this.moviesTable.filter = filter.trim()
+  requestNextPage() {
+    this.movieService.getUpcomingMovies(this.currentPage++).subscribe(res => {
+      res.data.forEach(el => el.poster_path = `${this.movieApiBaseURL}${el.poster_path}`);
+      this.movies = this.movies.concat(res.data);
+      this.movieTableSource.data = this.movies;
+      this.moviesTable.renderRows()
+    });
   }
 
-  getGenresMap() {
-    let genres = []
-    this.movieService.getGenres().subscribe(res => {
-      genres = res.data.genres
-      genres.map(el => {
-        this.genresMap[`${el.id}`] = el.name
-      })
-    })
+
+  filterMovie(filter: string) {
+    this.movieTableSource.filter = filter.trim()
   }
 
   ngOnInit() {
-    // this.getGenresMap()
     this.getUpcomingMovies()
-  }
-
-  getMovieGenres(genre_ids: [number]) {
-    let genres: string = ''
-    for (let genreId of genre_ids)
-      genres+= this.genresMap[`${genreId}`]
-    return genres
   }
 
 }

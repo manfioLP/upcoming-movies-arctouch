@@ -7,7 +7,9 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"node src/server.js",
+    "postinstall":"tsc"
   },
   "repository": {
     "type": "git",
@@ -36,5 +38,8 @@
     "path": "^0.12.7",
     "request": "^2.88.0",
     "require": "^2.4.20"
-  }
+  },
+  "engines":{
+    "node":"10.15.3"
+ },
 }

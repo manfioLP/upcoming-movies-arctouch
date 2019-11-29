@@ -2,3 +2,23 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+button {
+  padding: 7px;
+}
+
+.pad-left {
+  padding-left: 30px;
+}
+
+.flex {
+  display: flex;
+}
+
+.title {
+  padding-top: 20px;
+}
+
+.centered {
+  text-align: center
+}

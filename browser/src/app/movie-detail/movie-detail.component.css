@@ -1,0 +1,10 @@
+.movie-card {
+  margin: 20px;
+  margin-top: 150px;
+  width: 500px;
+}
+
+.fixed {
+  position:fixed;
+  top:20px;
+}

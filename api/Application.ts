@@ -93,7 +93,7 @@ export class Application {
    * Caso contrario, ele inicia apenas em http.
    */
   private initServer() {
-      this.mainPort = Application.config.server.port;
+      this.mainPort = process.env.PORT;
       return HTTP.createServer(this.app).listen(this.mainPort);
   }
 

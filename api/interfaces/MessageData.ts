@@ -1,6 +1,7 @@
 export interface MessageData {
 	error: errorMessage;
 	success: any;
+	status?: number;
 }
 
 export interface errorMessage {

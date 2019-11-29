@@ -1,0 +1,27 @@
+<div *ngIf="movie" class="movie-card fixed">
+  <h2>{{movie.title | uppercase}} Details</h2>
+  <div>
+    <mat-card>
+      <mat-card-title>
+        {{ movie.original_title }}
+      </mat-card-title>
+      <mat-card-subtitle>
+        Release Date: {{ movie.release_date }}
+      </mat-card-subtitle>
+<!--      <mat-card-content>-->
+<!--        <span style="font-weight: bold">Data de Estreia:</span> {{ movie.release_date }}-->
+<!--      </mat-card-content>-->
+      <mat-card-content>
+        <span style="font-weight: bold">Genre(s):</span> {{ movie.genres}}
+      </mat-card-content>
+      <mat-card-content>
+        <span style="font-weight: bold">Overview:</span> {{ movie.overview }}
+      </mat-card-content>
+      <mat-card-content>
+<!--        <span style="font-weight: bold">Diretor(es):</span> {{ movie.director }}-->
+        <img [src]="movie.poster_path"/>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>

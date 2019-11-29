@@ -1,0 +1,50 @@
+<div class="pad-left flex">
+    <div>
+        <h2> Welcome to ArcTouch's Upcoming Movies</h2>
+        <div>
+            <!-- TODO: fix loading -->
+            <!-- <ngx-loading [show]="loading" [config]="{ backdropBorderRadius: '3px' }" [template]="customLoadingTemplate"></ngx-loading> -->
+            <div>
+                <mat-form-field>
+                    <input matInput (keyup)="filterMovie($event.target.value)" placeholder="Search">
+                </mat-form-field>
+            </div>
+    
+            <table mat-table [dataSource]="movieTableSource" class="mat-elevation-z6">
+                
+                <ng-container matColumnDef="original_title">
+                    <th math-header-cell *matHeaderCellDef> Name</th>
+                    <td mat-cell *matCellDef="let element"> {{element.original_title}}</td>
+                </ng-container>
+                
+                <ng-container matColumnDef="poster_path">
+                    <th math-header-cell *matHeaderCellDef> Poster</th>
+                    <td mat-cell *matCellDef="let element">
+                      <img [src]="element.poster_path"/>
+                    </td>
+                  </ng-container>
+                
+                <ng-container matColumnDef="genres">
+                    <th math-header-cell *matHeaderCellDef> Genre</th>
+                    <td mat-cell *matCellDef="let element"> {{element.genres}}</td>
+                </ng-container>
+                
+                <ng-container matColumnDef="release_date">
+                    <th math-header-cell *matHeaderCellDef> Release Date</th>
+                    <td mat-cell *matCellDef="let element"> {{element.release_date}}</td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+                <tr mat-row *matRowDef="let myRowData; columns: columnsToDisplay" (click)="rowClick(myRowData)"></tr>
+            </table>
+        </div>
+        <div>
+          <button class="show-more" mat-raised-button (click)="requestNextPage()"><b>Show More...</b></button>
+        </div>
+    </div>
+    
+    <app-movie-detail
+        *ngIf="selectedMovie"
+        [movie]="selectedMovie">
+    </app-movie-detail>
+</div>

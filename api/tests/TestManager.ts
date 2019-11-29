@@ -14,7 +14,7 @@ export class TestManager extends Source {
         this.application = new Application(path.resolve("./config.json"));
     }
 
-    async destroy() {
-        return await this.application.destroy();
-    }
+    // async destroy() {
+    //     return await this.application.destroy();
+    // }
 }

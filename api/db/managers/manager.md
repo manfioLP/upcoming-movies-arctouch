@@ -1,1 +1,0 @@
-Here you define your managers according to your project modeling needs.

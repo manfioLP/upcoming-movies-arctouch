@@ -27,6 +27,7 @@ import {MatInputModule} from '@angular/material';
     MatInputModule,
     MatTableModule,
     HttpClientModule,
+    MatCardModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
